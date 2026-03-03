@@ -108,7 +108,7 @@ export function AboutPage() {
             initial="hidden"
             whileInView="visible"
             viewport={viewport}
-            className="glass-card rounded-2xl p-8"
+            className="glass-card rounded-2xl p-6 sm:p-8"
           >
             <h3 className="font-heading font-semibold text-xl text-foreground mb-6">
               By the Numbers

@@ -27,7 +27,9 @@ export async function GET() {
       if (!doc.exists) return {};
       return { id: doc.id, ...doc.data() };
     });
-    return NextResponse.json(data);
+    return NextResponse.json(data, {
+      headers: { "Cache-Control": "public, s-maxage=600, stale-while-revalidate=3600" },
+    });
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Server error";
     return NextResponse.json({ error: msg }, { status: 500 });

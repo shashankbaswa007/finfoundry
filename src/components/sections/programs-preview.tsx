@@ -8,6 +8,7 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { programs as staticPrograms } from "@/data/site-data";
 import { HiArrowRight } from "react-icons/hi";
 import { fadeUp, stagger, viewport } from "@/lib/motion";
+import { TiltCard } from "@/components/shared/tilt-card";
 import {
   TrendingUp,
   BarChart3,
@@ -59,17 +60,21 @@ export function ProgramsPreview() {
             <motion.div
               key={program.title}
               variants={fadeUp}
-              className="group glass-card rounded-2xl p-7 transition-all duration-[250ms] ease-out hover:-translate-y-1"
             >
-              <div className="w-11 h-11 rounded-xl neo-icon flex items-center justify-center mb-5">
-                <Icon className="w-5 h-5 text-teal-light/80" />
-              </div>
-              <h3 className="font-heading font-semibold text-[17px] text-foreground mb-2 tracking-[-0.01em]">
-                {program.title}
-              </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {program.description}
-              </p>
+              <TiltCard
+                className="group glass-card rounded-2xl p-7 h-full transition-all duration-[250ms] ease-out"
+                tiltStrength={6}
+              >
+                <div className="w-11 h-11 rounded-xl neo-icon flex items-center justify-center mb-5">
+                  <Icon className="w-5 h-5 text-teal-light/80" />
+                </div>
+                <h3 className="font-heading font-semibold text-[17px] text-foreground mb-2 tracking-[-0.01em]">
+                  {program.title}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {program.description}
+                </p>
+              </TiltCard>
             </motion.div>
           );
         })}

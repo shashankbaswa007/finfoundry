@@ -639,3 +639,7 @@
     0 0 20px -4px rgba(16, 185, 129, 0.15),
     inset 0 0.5px 0 rgba(255, 255, 255, 0.06);
 }
+
+/* Stock ticker now uses rAF-based animation (no CSS keyframes needed) */
+
+/* Custom cursor ring — no cursor override needed (native cursor stays) */

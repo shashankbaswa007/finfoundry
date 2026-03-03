@@ -28,7 +28,11 @@ export async function GET(request: NextRequest) {
       if (!showAll) return docs.filter((m: Record<string, unknown>) => m.visible !== false);
       return docs;
     });
-    return NextResponse.json(team);
+    // Public requests get CDN-cached; admin (?all=1) do not
+    const headers: Record<string, string> = showAll
+      ? {}
+      : { "Cache-Control": "public, s-maxage=600, stale-while-revalidate=3600" };
+    return NextResponse.json(team, { headers });
   } catch (error: unknown) {
     // Auth failures for ?all=1 should return 403, not empty array
     if (showAll) {

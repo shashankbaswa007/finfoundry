@@ -4,6 +4,8 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { HiArrowRight } from "react-icons/hi";
 import { useEntrance } from "@/lib/entrance-context";
+import { ParticleNetwork } from "@/components/shared/particle-network";
+import { MagneticButton } from "@/components/shared/magnetic-button";
 
 /* ═══════════════════════════════════════════════════════════════ */
 /*  HERO — Content-first. Clean background, no glow artifacts.  */
@@ -33,6 +35,9 @@ export function HeroSection() {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero">
       {/* Fine dot grid for depth */}
       <div className="absolute inset-0 grid-pattern opacity-60" />
+
+      {/* Interactive particle network — ambient depth layer */}
+      <ParticleNetwork />
 
       {/* Floating aurora orbs */}
       <div
@@ -91,14 +96,62 @@ export function HeroSection() {
           </span>
         </motion.div>
 
-        {/* Heading */}
+        {/* Heading — Word-by-word reveal */}
         <motion.h1
           variants={fadeUp}
           className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-[80px] font-bold tracking-[-0.03em] leading-[1.08] max-w-4xl mx-auto"
         >
-          Build Your
+          <motion.span
+            className="inline"
+            variants={{
+              hidden: {},
+              show: { transition: { staggerChildren: 0.06, delayChildren: 0.05 } },
+            }}
+          >
+            {["Build", "Your"].map((word, i) => (
+              <span key={i} className="inline-block overflow-hidden mr-[0.25em] align-bottom">
+                <motion.span
+                  className="inline-block"
+                  variants={{
+                    hidden: { y: "100%", opacity: 0 },
+                    show: {
+                      y: "0%",
+                      opacity: 1,
+                      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const },
+                    },
+                  }}
+                >
+                  {word}
+                </motion.span>
+              </span>
+            ))}
+          </motion.span>
           <br />
-          <span className="text-gradient">Financial Edge</span>
+          <motion.span
+            className="inline"
+            variants={{
+              hidden: {},
+              show: { transition: { staggerChildren: 0.06, delayChildren: 0.2 } },
+            }}
+          >
+            {["Financial", "Edge"].map((word, i) => (
+              <span key={i} className="inline-block overflow-hidden mr-[0.25em] align-bottom">
+                <motion.span
+                  className="inline-block text-gradient"
+                  variants={{
+                    hidden: { y: "100%", opacity: 0 },
+                    show: {
+                      y: "0%",
+                      opacity: 1,
+                      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const },
+                    },
+                  }}
+                >
+                  {word}
+                </motion.span>
+              </span>
+            ))}
+          </motion.span>
         </motion.h1>
 
         {/* Decorative gradient rule */}
@@ -128,19 +181,23 @@ export function HeroSection() {
           variants={fadeUp}
           className="mt-10 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <Link
-            href="/contact"
-            className="group btn-primary inline-flex items-center gap-2 px-8 py-3.5 text-sm rounded-xl"
-          >
-            Join FinFoundry
-            <HiArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200" />
-          </Link>
-          <Link
-            href="/programs"
-            className="btn-ghost inline-flex items-center gap-2 px-8 py-3.5 text-sm font-semibold rounded-xl text-foreground"
-          >
-            Explore Programs
-          </Link>
+          <MagneticButton strength={0.25}>
+            <Link
+              href="/contact"
+              className="group btn-primary inline-flex items-center gap-2 px-8 py-3.5 text-sm rounded-xl"
+            >
+              Join FinFoundry
+              <HiArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200" />
+            </Link>
+          </MagneticButton>
+          <MagneticButton strength={0.2}>
+            <Link
+              href="/programs"
+              className="btn-ghost inline-flex items-center gap-2 px-8 py-3.5 text-sm font-semibold rounded-xl text-foreground"
+            >
+              Explore Programs
+            </Link>
+          </MagneticButton>
         </motion.div>
       </motion.div>
 

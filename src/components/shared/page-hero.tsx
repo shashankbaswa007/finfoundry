@@ -18,7 +18,7 @@ export function PageHero({ badge, title, description }: PageHeroProps) {
   const ease = [0.16, 1, 0.3, 1] as const;
 
   return (
-    <section className="relative flex items-center justify-center overflow-hidden bg-gradient-hero pt-32 pb-20 sm:pt-36 sm:pb-24 md:pt-40 md:pb-28">
+    <section className="relative flex items-center justify-center overflow-hidden bg-gradient-hero pt-40 pb-20 sm:pt-44 sm:pb-24 md:pt-48 md:pb-28">
       {/* Fine dot grid */}
       <div className="absolute inset-0 grid-pattern opacity-40" />
 

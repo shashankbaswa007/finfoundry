@@ -94,6 +94,17 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Embed role in Firebase Auth custom claims so future verifySession()
+    // calls can read it from the decoded token instead of hitting Firestore.
+    // NOTE: Claims don't appear in the CURRENT ID token — only in the next
+    // refresh (~1 hr) or next login. That's fine; verifySession has a
+    // Firestore fallback for unclaimed sessions.
+    try {
+      await adminAuth.setCustomUserClaims(uid, { role });
+    } catch (e) {
+      console.warn("Failed to set custom claims:", e);
+    }
+
     // Create session cookie
     const sessionCookie = await adminAuth.createSessionCookie(idToken, {
       expiresIn: FIVE_DAYS_MS,

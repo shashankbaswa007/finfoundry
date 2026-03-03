@@ -15,7 +15,7 @@ interface CacheEntry<T> {
 const store = new Map<string, CacheEntry<unknown>>();
 const inflight = new Map<string, Promise<unknown>>();
 
-const DEFAULT_TTL_MS = 30_000; // 30 seconds (faster refresh on serverless)
+const DEFAULT_TTL_MS = 10 * 60 * 1000; // 10 minutes — warm instances share cache across requests
 
 /**
  * Get cached value, or fetch fresh if expired/missing.

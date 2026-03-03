@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { HiArrowRight } from "react-icons/hi";
 import { fadeUp, viewport } from "@/lib/motion";
+import { MagneticButton } from "@/components/shared/magnetic-button";
 
 export function JoinCTA() {
   return (
@@ -54,19 +55,23 @@ export function JoinCTA() {
             No prior experience required — just the drive to learn.
           </p>
           <div className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href="/contact"
-              className="group btn-primary inline-flex items-center gap-2 px-8 py-3.5 text-sm rounded-xl"
-            >
-              Join FinFoundry
-              <HiArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200" />
-            </Link>
-            <Link
-              href="/about"
-              className="btn-ghost inline-flex items-center gap-2 px-8 py-3.5 text-sm font-semibold rounded-xl text-foreground"
-            >
-              Learn More
-            </Link>
+            <MagneticButton strength={0.25}>
+              <Link
+                href="/contact"
+                className="group btn-primary inline-flex items-center gap-2 px-8 py-3.5 text-sm rounded-xl"
+              >
+                Join FinFoundry
+                <HiArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200" />
+              </Link>
+            </MagneticButton>
+            <MagneticButton strength={0.2}>
+              <Link
+                href="/about"
+                className="btn-ghost inline-flex items-center gap-2 px-8 py-3.5 text-sm font-semibold rounded-xl text-foreground"
+              >
+                Learn More
+              </Link>
+            </MagneticButton>
           </div>
         </motion.div>
       </div>

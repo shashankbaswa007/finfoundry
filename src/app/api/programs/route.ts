@@ -16,7 +16,9 @@ export async function GET() {
         .get();
       return snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     });
-    return NextResponse.json(programs);
+    return NextResponse.json(programs, {
+      headers: { "Cache-Control": "public, s-maxage=600, stale-while-revalidate=3600" },
+    });
   } catch {
     return NextResponse.json([], { status: 200 });
   }

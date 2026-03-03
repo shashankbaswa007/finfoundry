@@ -16,7 +16,9 @@ export async function GET() {
         .get();
       return snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     });
-    return NextResponse.json(events);
+    return NextResponse.json(events, {
+      headers: { "Cache-Control": "public, s-maxage=600, stale-while-revalidate=3600" },
+    });
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Server error";
     return NextResponse.json({ error: msg }, { status: 500 });

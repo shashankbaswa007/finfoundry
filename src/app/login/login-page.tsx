@@ -154,7 +154,7 @@ export function LoginPage() {
         </Link>
 
         {/* Card */}
-        <div className="glass-card rounded-2xl p-8">
+        <div className="glass-card rounded-2xl p-6 sm:p-8">
           <h1 className="font-heading font-bold text-2xl text-foreground mb-1">
             {mode === "reset"
               ? "Reset password"

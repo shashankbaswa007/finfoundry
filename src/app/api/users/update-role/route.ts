@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { adminAuth, adminDb } from "@/lib/firebase/admin";
-import { verifySession } from "@/lib/firebase/auth-helpers";
+import { verifySessionFull } from "@/lib/firebase/auth-helpers";
 import type { UserRole } from "@/types/firebase";
 import { logAction } from "@/lib/audit-log";
 
@@ -16,7 +16,8 @@ const VALID_ROLES: UserRole[] = ["member", "editor", "admin", "super_admin"];
  */
 export async function PUT(request: NextRequest) {
   try {
-    const session = await verifySession(request);
+    // Use verifySessionFull for security-critical role operations
+    const session = await verifySessionFull(request);
 
     const { uid, newRole } = await request.json();
 
@@ -96,6 +97,14 @@ export async function PUT(request: NextRequest) {
 
     await userRef.update({ role: newRole });
 
+    // Keep Firebase Auth custom claims in sync so verifySession()
+    // returns the correct role without hitting Firestore
+    try {
+      await adminAuth.setCustomUserClaims(uid, { role: newRole });
+    } catch (e) {
+      console.warn("Failed to sync custom claims on role change:", e);
+    }
+
     await logAction(
       session.uid,
       session.name,
@@ -120,7 +129,7 @@ export async function PUT(request: NextRequest) {
  */
 export async function PATCH(request: NextRequest) {
   try {
-    const session = await verifySession(request);
+    const session = await verifySessionFull(request);
 
     if (session.role !== "super_admin") {
       return NextResponse.json(
@@ -170,6 +179,14 @@ export async function PATCH(request: NextRequest) {
     }
 
     await adminDb.collection("users").doc(uid).update({ active });
+
+    // Sync active status to custom claims
+    try {
+      const currentRole = userSnap.data()!.role || "member";
+      await adminAuth.setCustomUserClaims(uid, { role: currentRole, ...(active ? {} : { deactivated: true }) });
+    } catch (e) {
+      console.warn("Failed to sync custom claims on active toggle:", e);
+    }
 
     // Revoke all refresh tokens when deactivating → forces instant logout
     // verifySessionCookie(..., true) will reject revoked tokens on next request

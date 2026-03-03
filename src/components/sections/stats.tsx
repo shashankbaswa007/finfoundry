@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { stats as staticStats } from "@/data/site-data";
 import { perspectiveRise, staggerPerspective, viewportCard } from "@/lib/motion";
+import { AnimatedCounter } from "@/components/shared/animated-counter";
 
 /* ═══════════════════════════════════════════════════════════════════
  * Stats v3.0 — Perspective Rise Cards
@@ -61,7 +62,7 @@ export function StatsSection() {
               style={{ transformStyle: "preserve-3d" }}
             >
               <div className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-gradient-gold tracking-[-0.03em]">
-                {stat.value}
+                <AnimatedCounter value={stat.value} />
               </div>
               <div className="mt-3 text-sm text-muted-foreground font-medium tracking-wide">
                 {stat.label}

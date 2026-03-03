@@ -115,7 +115,7 @@ export function Navbar() {
           duration: prefersReduced ? 0 : duration.l,
           ease: ease.structural,
         }}
-        className="fixed top-0 left-0 right-0 z-50"
+        className="fixed top-[36px] left-0 right-0 z-50"
         style={{
           paddingTop: `${16 - scrollProgress * 6}px`,
           paddingBottom: `${16 - scrollProgress * 6}px`,

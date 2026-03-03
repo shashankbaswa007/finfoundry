@@ -187,7 +187,7 @@ export function ContactPage() {
 
           {/* Contact Info */}
           <motion.div variants={fadeUp} className="space-y-6">
-            <div className="glass-card rounded-2xl p-8">
+            <div className="glass-card rounded-2xl p-6 sm:p-8">
               <h3 className="font-heading font-semibold text-lg text-foreground mb-6">
                 Contact Information
               </h3>
@@ -226,14 +226,14 @@ export function ContactPage() {
               </div>
             </div>
 
-            <div className="glass-card rounded-2xl p-8">
+            <div className="glass-card rounded-2xl p-6 sm:p-8">
               <h3 className="font-heading font-semibold text-lg text-foreground mb-4">
                 Follow Us
               </h3>
               <p className="text-sm text-muted-foreground mb-6">
                 Stay updated with the latest events and content.
               </p>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 <a
                   href={links.instagram}
                   target="_blank"
@@ -255,7 +255,7 @@ export function ContactPage() {
               </div>
             </div>
 
-            <div className="glass-card rounded-2xl p-8">
+            <div className="glass-card rounded-2xl p-6 sm:p-8">
               <h3 className="font-heading font-semibold text-lg text-foreground mb-4">
                 Join FinFoundry
               </h3>
