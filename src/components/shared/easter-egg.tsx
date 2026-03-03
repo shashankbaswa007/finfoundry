@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import confetti from "canvas-confetti";
 
 /* ═══════════════════════════════════════════════════════════════════
- * EasterEgg v1.0 — Konami Code hidden interaction
+ * EasterEgg v1.1 — Konami Code hidden interaction
  *
  * Listens for the classic Konami Code sequence:
  *   ↑ ↑ ↓ ↓ ← → ← → B A
@@ -12,15 +12,9 @@ import confetti from "canvas-confetti";
  * On successful input, fires a gold + emerald confetti burst
  * using canvas-confetti (lightweight, tree-shaken).
  *
- * Architecture:
- *   - Keyboard-only (no touch support needed)
- *   - Tracks last 10 keystrokes in a rolling window
- *   - Resets sequence after successful trigger
- *   - Multiple triggers allowed per session
- *   - No visual component rendered (returns null)
- *
- * SOP compliance: §6 (micro-interaction), does not violate §11
- * (it's a hidden reward, not a visible decoration)
+ * v1.1 fix: Uses a ref to track keystrokes instead of React state.
+ * State updaters are pure functions — calling confetti() inside
+ * one is a side effect that React 19 strict mode can suppress.
  * ═══════════════════════════════════════════════════════════════════ */
 
 const KONAMI_SEQUENCE = [
@@ -36,6 +30,8 @@ const KONAMI_SEQUENCE = [
   "a",
 ];
 
+const KONAMI_STR = KONAMI_SEQUENCE.join(",");
+
 function fireConfetti() {
   const defaults = {
     origin: { y: 0.7 },
@@ -43,7 +39,6 @@ function fireConfetti() {
     disableForReducedMotion: true,
   };
 
-  // Emerald burst
   confetti({
     ...defaults,
     particleCount: 80,
@@ -54,7 +49,6 @@ function fireConfetti() {
     origin: { x: 0.3, y: 0.7 },
   });
 
-  // Gold burst (slight delay)
   setTimeout(() => {
     confetti({
       ...defaults,
@@ -67,7 +61,6 @@ function fireConfetti() {
     });
   }, 150);
 
-  // Center burst
   setTimeout(() => {
     confetti({
       ...defaults,
@@ -81,26 +74,23 @@ function fireConfetti() {
 }
 
 export function EasterEgg() {
-  const [sequence, setSequence] = useState<string[]>([]);
+  const keysRef = useRef<string[]>([]);
+
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    const next = [...keysRef.current, key].slice(-10);
+    keysRef.current = next;
+
+    if (next.length === 10 && next.join(",") === KONAMI_STR) {
+      keysRef.current = [];
+      fireConfetti();
+    }
+  }, []);
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
-      setSequence((prev) => {
-        const next = [...prev, key].slice(-10);
-
-        if (next.length === 10 && next.join(",") === KONAMI_SEQUENCE.join(",")) {
-          fireConfetti();
-          return []; // Reset for reuse
-        }
-
-        return next;
-      });
-    };
-
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [handleKeyDown]);
 
   return null;
 }
