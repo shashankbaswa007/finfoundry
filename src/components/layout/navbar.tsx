@@ -393,7 +393,7 @@ export function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 lg:hidden"
+            className="fixed inset-0 z-[55] lg:hidden"
           >
             <div
               className="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -404,72 +404,107 @@ export function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ duration: duration.m, ease: ease.structural }}
-              className="absolute right-0 top-0 bottom-0 w-[280px] sm:w-[300px] flex flex-col"
+              className="absolute right-0 top-0 bottom-0 w-[300px] sm:w-[320px] flex flex-col"
               style={{
-                background: "rgba(5, 8, 22, 0.94)",
-                backdropFilter: "blur(24px) saturate(1.3)",
-                WebkitBackdropFilter: "blur(24px) saturate(1.3)",
+                background: "linear-gradient(180deg, rgba(5,8,22,0.98) 0%, rgba(5,8,22,0.96) 100%)",
+                backdropFilter: "blur(32px) saturate(1.4)",
+                WebkitBackdropFilter: "blur(32px) saturate(1.4)",
                 borderLeft: "1px solid rgba(255,255,255,0.06)",
-                boxShadow: "-8px 0 40px rgba(0,0,0,0.4)",
+                boxShadow: "-12px 0 60px rgba(0,0,0,0.5)",
               }}
             >
-              {/* Mobile nav links */}
-              <div className="flex-1 overflow-y-auto px-4 pt-20 pb-4">
-                <div className="flex flex-col gap-1">
-                  {navLinks.map((link, i) => (
-                    <motion.div
-                      key={link.href}
-                      initial={{ opacity: 0, x: 16 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{
-                        delay: i * 0.04 + 0.1,
-                        duration: 0.3,
-                        ease: ease.structural,
-                      }}
-                    >
-                      <Link
-                        href={link.href}
-                        className={`block px-4 py-3 text-[15px] font-medium rounded-xl transition-all duration-200 ${
-                          pathname === link.href
-                            ? "text-foreground bg-white/[0.06]"
-                            : "text-muted-foreground hover:text-foreground hover:bg-white/[0.04]"
-                        }`}
+              {/* ── Drawer Header ── */}
+              <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-white/[0.06]">
+                <Link
+                  href="/"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-2.5"
+                >
+                  <Image
+                    src="/logo.png"
+                    alt="FinFoundry"
+                    width={80}
+                    height={100}
+                    className="rounded-[3px] w-7 h-auto"
+                    unoptimized
+                  />
+                  <span className="font-heading font-bold text-base tracking-[-0.01em]">
+                    <span className="text-teal-light">Fin</span>
+                    <span className="text-gold">Foundry</span>
+                  </span>
+                </Link>
+                <button
+                  onClick={() => setMobileOpen(false)}
+                  className="p-2 -mr-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/[0.06] transition-colors duration-150"
+                  aria-label="Close menu"
+                >
+                  <IoCloseOutline className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* ── Nav Links ── */}
+              <div className="flex-1 overflow-y-auto px-3 py-3">
+                <div className="flex flex-col gap-0.5">
+                  {navLinks.map((link, i) => {
+                    const isActive = pathname === link.href;
+                    return (
+                      <motion.div
+                        key={link.href}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{
+                          delay: i * 0.04 + 0.08,
+                          duration: 0.3,
+                          ease: ease.structural,
+                        }}
                       >
-                        {link.label}
-                      </Link>
-                    </motion.div>
-                  ))}
+                        <Link
+                          href={link.href}
+                          className={`flex items-center gap-3 px-4 py-3 text-[15px] font-medium rounded-xl transition-all duration-200 ${
+                            isActive
+                              ? "text-foreground bg-teal/[0.08] border border-teal/[0.12]"
+                              : "text-muted-foreground hover:text-foreground hover:bg-white/[0.04] border border-transparent"
+                          }`}
+                        >
+                          {isActive && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0 shadow-[0_0_6px_rgba(16,185,129,0.5)]" />
+                          )}
+                          {link.label}
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Mobile bottom actions */}
+              {/* ── Bottom Actions ── */}
               <motion.div
-                initial={{ opacity: 0, y: 8 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35, duration: 0.3, ease: ease.structural }}
                 className="p-4 pt-3 border-t border-white/[0.06] space-y-2.5"
               >
                 {user ? (
                   <>
-                    <div className="flex items-center gap-3 px-2 py-3 mb-1">
+                    <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
                       {user.photoURL ? (
                         <Image
                           src={user.photoURL}
                           alt={user.displayName || "User"}
-                          width={36}
-                          height={36}
-                          className="rounded-full ring-1 ring-white/10 shrink-0"
+                          width={40}
+                          height={40}
+                          className="rounded-full ring-2 ring-teal/20 shrink-0"
                         />
                       ) : (
-                        <span className="w-9 h-9 rounded-full bg-gradient-to-br from-teal/40 to-emerald-600/40 flex items-center justify-center text-sm font-semibold text-white ring-1 ring-white/10 shrink-0">
+                        <span className="w-10 h-10 rounded-full bg-gradient-to-br from-teal/40 to-emerald-600/40 flex items-center justify-center text-sm font-semibold text-white ring-2 ring-teal/20 shrink-0">
                           {(user.displayName || user.email || "U").charAt(0).toUpperCase()}
                         </span>
                       )}
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium text-foreground truncate">
+                        <p className="text-sm font-semibold text-foreground truncate">
                           {user.displayName || "User"}
                         </p>
-                        <p className="text-xs text-muted-foreground truncate">
+                        <p className="text-[11px] text-muted-foreground truncate mt-0.5">
                           {user.email}
                         </p>
                       </div>
